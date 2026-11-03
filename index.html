@@ -3,19 +3,47 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gerenciador de Tarefas</title>
+  <title>Kanban de Tarefas</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <main class="app-container">
-    <h1>Minhas Tarefas</h1>
-    
-    <form id="task-form">
-      <input type="text" id="task-input" placeholder="Digite uma tarefa..." required>
-      <button type="submit">Adicionar</button>
-    </form>
+    <header class="app-header">
+      <h1>Meu Kanban</h1>
+      <form id="task-form">
+        <input type="text" id="task-input" placeholder="Nova tarefa..." required>
+        <button type="submit">Adicionar</button>
+      </form>
+    </header>
 
-    <ul id="task-list"></ul>
+    <div class="kanban-board">
+      <!-- Coluna 1: Novo -->
+      <div class="kanban-column" data-status="todo">
+        <div class="column-header">
+          <h2>Novo</h2>
+          <span class="task-count" id="count-todo">0</span>
+        </div>
+        <div class="task-list" id="todo"></div>
+      </div>
+
+      <!-- Coluna 2: Fazendo -->
+      <div class="kanban-column" data-status="doing">
+        <div class="column-header">
+          <h2>Fazendo</h2>
+          <span class="task-count" id="count-doing">0</span>
+        </div>
+        <div class="task-list" id="doing"></div>
+      </div>
+
+      <!-- Coluna 3: Concluído -->
+      <div class="kanban-column" data-status="done">
+        <div class="column-header">
+          <h2>Concluído</h2>
+          <span class="task-count" id="count-done">0</span>
+        </div>
+        <div class="task-list" id="done"></div>
+      </div>
+    </div>
   </main>
 
   <script src="app.js"></script>

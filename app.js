@@ -1,41 +1,110 @@
-// 1. Seleção dos elementos do DOM
 const taskForm = document.getElementById('task-form');
 const taskInput = document.getElementById('task-input');
-const taskList = document.getElementById('task-list');
+const taskLists = document.querySelectorAll('.task-list');
 
-// 2. Evento para adicionar tarefa
+let draggedCard = null;
+
+// Carregar tarefas ao abrir a página
+document.addEventListener('DOMContentLoaded', loadTasks);
+
+// Adicionar nova tarefa (vai direto para a coluna "Novo")
 taskForm.addEventListener('submit', (e) => {
-  e.preventDefault(); // Impede o recarregamento da página
+  e.preventDefault();
+  const text = taskInput.value.trim();
+  if (!text) return;
 
-  const taskText = taskInput.value.trim();
-  if (taskText === '') return;
+  const id = Date.now().toString();
+  createTaskCard(id, text, 'todo');
+  saveState();
 
-  addTask(taskText);
-  taskInput.value = ''; // Limpa o input
+  taskInput.value = '';
 });
 
-// 3. Função para renderizar uma nova tarefa
-function addTask(text) {
-  const li = document.createElement('li');
+// Criar o card da tarefa com eventos de Drag & Drop
+function createTaskCard(id, text, status) {
+  const card = document.createElement('div');
+  card.className = 'task-card';
+  card.draggable = true;
+  card.dataset.id = id;
 
   const span = document.createElement('span');
   span.textContent = text;
-  
-  // Alternar estado de concluído ao clicar no texto
-  span.addEventListener('click', () => {
-    li.classList.toggle('completed');
-  });
 
   const deleteBtn = document.createElement('button');
-  deleteBtn.textContent = '✕';
   deleteBtn.className = 'delete-btn';
-  
-  // Remover tarefa ao clicar no botão
+  deleteBtn.textContent = '✕';
   deleteBtn.addEventListener('click', () => {
-    li.remove();
+    card.remove();
+    saveState();
   });
 
-  li.appendChild(span);
-  li.appendChild(deleteBtn);
-  taskList.appendChild(li);
+  card.appendChild(span);
+  card.appendChild(deleteBtn);
+
+  // Eventos do Drag & Drop
+  card.addEventListener('dragstart', (e) => {
+    draggedCard = card;
+    card.classList.add('dragging');
+    e.dataTransfer.setData('text/plain', id);
+  });
+
+  card.addEventListener('dragend', () => {
+    draggedCard = null;
+    card.classList.remove('dragging');
+    saveState();
+  });
+
+  // Insere na coluna correta
+  document.getElementById(status).appendChild(card);
+}
+
+// Configurar as zonas de soltar (colunas)
+taskLists.forEach(list => {
+  list.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    list.classList.add('drag-over');
+  });
+
+  list.addEventListener('dragleave', () => {
+    list.classList.remove('drag-over');
+  });
+
+  list.addEventListener('drop', (e) => {
+    e.preventDefault();
+    list.classList.remove('drag-over');
+    if (draggedCard) {
+      list.appendChild(draggedCard);
+      saveState();
+    }
+  });
+});
+
+// Atualizar contadores e salvar no localStorage
+function saveState() {
+  const tasks = [];
+
+  document.querySelectorAll('.kanban-column').forEach(column => {
+    const status = column.dataset.status;
+    const list = column.querySelector('.task-list');
+    const cards = list.querySelectorAll('.task-card');
+
+    // Atualizar contador da coluna
+    document.getElementById(`count-${status}`).textContent = cards.length;
+
+    cards.forEach(card => {
+      tasks.push({
+        id: card.dataset.id,
+        text: card.querySelector('span').textContent,
+        status: status
+      });
+    });
+  });
+
+  localStorage.setItem('kanban-tasks', JSON.stringify(tasks));
+}
+
+function loadTasks() {
+  const tasks = JSON.parse(localStorage.getItem('kanban-tasks')) || [];
+  tasks.forEach(task => createTaskCard(task.id, task.text, task.status));
+  saveState();
 }

@@ -8,73 +8,130 @@
 body {
   background-color: #121214;
   color: #e1e1e6;
-  display: flex;
-  justify-content: center;
-  padding-top: 3rem;
+  padding: 2rem;
 }
 
 .app-container {
-  width: 100%;
-  max-width: 450px;
-  padding: 1.5rem;
-  background-color: #202024;
-  border-radius: 8px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
 }
 
 #task-form {
   display: flex;
   gap: 0.5rem;
-  margin: 1.5rem 0;
 }
 
 #task-input {
-  flex: 1;
-  padding: 0.75rem;
+  padding: 0.6rem 1rem;
   border-radius: 6px;
   border: 1px solid #323238;
-  background-color: #121214;
+  background-color: #202024;
   color: #fff;
+  width: 260px;
 }
 
 button {
-  padding: 0.75rem 1rem;
+  padding: 0.6rem 1.2rem;
   border-radius: 6px;
   border: none;
-  background-color: #8257e5;
+  background-color: #00875f;
   color: #fff;
   font-weight: bold;
   cursor: pointer;
 }
 
 button:hover {
-  background-color: #996dff;
+  background-color: #00b37e;
 }
 
-#task-list {
-  list-style: none;
+/* Kanban Board */
+.kanban-board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  align-items: start;
 }
 
-#task-list li {
+.kanban-column {
+  background-color: #202024;
+  border-radius: 8px;
+  padding: 1rem;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+}
+
+.column-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.75rem;
-  background-color: #29292e;
-  border-radius: 6px;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #323238;
 }
 
-#task-list li.completed span {
-  text-decoration: line-through;
-  color: #7c7c8a;
+.column-header h2 {
+  font-size: 1.1rem;
+}
+
+.task-count {
+  background-color: #29292e;
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  color: #8d8d99;
+}
+
+.task-list {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-height: 350px;
+}
+
+/* Efeito quando a coluna aceita a tarefa sendo arrastada */
+.task-list.drag-over {
+  background-color: rgba(255, 255, 255, 0.03);
+  border: 2px dashed #00875f;
+  border-radius: 6px;
+}
+
+/* Card de Tarefa */
+.task-card {
+  background-color: #29292e;
+  padding: 1rem;
+  border-radius: 6px;
+  cursor: grab;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-left: 4px solid #00875f;
+  user-select: none;
+}
+
+.task-card:active {
+  cursor: grabbing;
+}
+
+.task-card.dragging {
+  opacity: 0.4;
 }
 
 .delete-btn {
-  background-color: transparent;
+  background: transparent;
   color: #f75a68;
-  padding: 0.25rem 0.5rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
 }
 
 .delete-btn:hover {
-  background-color: rgba(247, 90, 104, 0.1);
+  background-color: rgba(247, 90, 104, 0.15);
 }

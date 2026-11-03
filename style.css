@@ -125,6 +125,15 @@ button:hover {
   opacity: 0.4;
 }
 
+.task-card span {
+    flex: 1;
+    cursor: pointer;
+}
+
+.task-card span:hover{
+    text-decoration: underline;
+}
+
 .delete-btn {
   background: transparent;
   color: #f75a68;

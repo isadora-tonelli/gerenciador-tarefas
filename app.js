@@ -29,11 +29,21 @@ function createTaskCard(id, text, status) {
 
   const span = document.createElement('span');
   span.textContent = text;
+  span.title = 'Clique duas vezes para editar';
+
+  span.addEventListener('dbclick', () => {
+    const newText = prompt('Editar tarefa:', span.textContent);
+    if(newText !== NULL && NEWtEXT.trim() !== ''){
+        span.textContent = newText.trim();
+        saveState();
+    }
+  })
 
   const deleteBtn = document.createElement('button');
   deleteBtn.className = 'delete-btn';
   deleteBtn.textContent = '✕';
-  deleteBtn.addEventListener('click', () => {
+  deleteBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
     card.remove();
     saveState();
   });

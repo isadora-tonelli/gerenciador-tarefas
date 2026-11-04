@@ -7,35 +7,32 @@ let draggedCard = null;
 
 document.addEventListener('DOMContentLoaded', loadTasks);
 
-// Evento de envio do formulário
 taskForm.addEventListener('submit', (e) => {
-  e.preventDefault(); // Impede o F5 da página
+  e.preventDefault();
 
   const text = taskInput.value.trim();
   const dueDate = taskDateInput ? taskDateInput.value : '';
-  
+
   if (!text) return;
 
   const id = Date.now().toString();
-  
-  // Cria o card e salva no localStorage
+
   createTaskCard(id, text, dueDate, 'todo');
   saveState();
 
-  // Limpa os campos
   taskInput.value = '';
   if (taskDateInput) taskDateInput.value = '';
 });
 
 function isOverdue(dueDateStr, status) {
   if (!dueDateStr || status === 'done') return false;
-  
+
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  
+
   const [year, month, day] = dueDateStr.split('-');
   const dueDate = new Date(year, month - 1, day);
-  
+
   return dueDate < today;
 }
 
@@ -83,7 +80,7 @@ function createTaskCard(id, text, dueDate, status) {
   const deleteBtn = document.createElement('button');
   deleteBtn.className = 'delete-btn';
   deleteBtn.textContent = '✕';
-  deleteBtn.type = 'button'; // Garante que não acione submit ao clicar
+  deleteBtn.type = 'button';
   deleteBtn.addEventListener('click', (e) => {
     e.stopPropagation();
     card.remove();
@@ -129,7 +126,7 @@ taskLists.forEach(list => {
 
       const status = list.parentElement.dataset.status;
       const dueDate = draggedCard.dataset.dueDate;
-      
+
       if (isOverdue(dueDate, status)) {
         draggedCard.classList.add('overdue');
       } else {

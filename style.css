@@ -126,12 +126,12 @@ button:hover {
 }
 
 .task-card span {
-    flex: 1;
-    cursor: pointer;
+  flex: 1;
+  cursor: pointer;
 }
 
-.task-card span:hover{
-    text-decoration: underline;
+.task-card span:hover {
+  text-decoration: underline;
 }
 
 .delete-btn {
@@ -145,7 +145,6 @@ button:hover {
   background-color: rgba(247, 90, 104, 0.15);
 }
 
-
 /* Input de data no header */
 #task-date-input {
   padding: 0.6rem;
@@ -153,6 +152,7 @@ button:hover {
   border: 1px solid #323238;
   background-color: #202024;
   color: #8d8d99;
+  color-scheme: dark; /* Garante o ícone do calendário visível em tema escuro */
 }
 
 /* Estrutura interna do card */

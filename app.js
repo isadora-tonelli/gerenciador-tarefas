@@ -5,6 +5,32 @@ const taskLists = document.querySelectorAll('.task-list');
 
 let draggedCard = null;
 
+const themeToggleBtn = document.getElementById('theme-toggle');
+
+// Carregar tema salvo ou usar o escuro como padrão
+const currentTheme = localStorage.getItem('theme') || 'dark';
+if (currentTheme === 'light') {
+  document.body.classList.add('light-theme');
+  if (themeToggleBtn) themeToggleBtn.textContent = '☀️ Tema Claro';
+}
+
+// Evento de clique no botão de tema
+if (themeToggleBtn) {
+  themeToggleBtn.addEventListener('click', () => {
+    document.body.classList.toggle('light-theme');
+    
+    let theme = 'dark';
+    if (document.body.classList.contains('light-theme')) {
+      theme = 'light';
+      themeToggleBtn.textContent = '☀️ Tema Claro';
+    } else {
+      themeToggleBtn.textContent = '🌙 Tema Escuro';
+    }
+    
+    localStorage.setItem('theme', theme);
+  });
+}
+
 document.addEventListener('DOMContentLoaded', loadTasks);
 
 taskForm.addEventListener('submit', (e) => {

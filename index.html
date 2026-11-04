@@ -10,11 +10,14 @@
   <main class="app-container">
     <header class="app-header">
       <h1>Meu Kanban</h1>
-       <form id="task-form">
+      <div class="header-actions">
+        <button type="button" id="theme-toggle" class="theme-btn">🌙 Tema Escuro</button>
+      </div>
+      <form id="task-form">
         <input type="text" id="task-input" placeholder="Nova tarefa..." required>
         <input type="date" id="task-date-input" title="Data de entrega">
         <button type="submit">Adicionar</button>
-    </form>
+      </form>
     </header>
 
     <div class="kanban-board">

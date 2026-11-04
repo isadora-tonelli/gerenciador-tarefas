@@ -180,3 +180,37 @@ button:hover {
   color: #f75a68;
   font-weight: bold;
 }
+
+
+/* Ajustes para ecrãs de telemóvel (até 768px) */
+@media (max-width: 768px) {
+  body {
+    padding: 1rem;
+  }
+
+  .app-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  #task-form {
+    flex-direction: column;
+  }
+
+  #task-input, 
+  #task-date-input, 
+  button {
+    width: 100%;
+  }
+
+  /* Faz as 3 colunas do Kanban ficarem empilhadas verticalmente */
+  .kanban-board {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .kanban-column {
+    min-height: auto;
+  }
+}

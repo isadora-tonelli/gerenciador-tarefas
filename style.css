@@ -144,3 +144,39 @@ button:hover {
 .delete-btn:hover {
   background-color: rgba(247, 90, 104, 0.15);
 }
+
+
+/* Input de data no header */
+#task-date-input {
+  padding: 0.6rem;
+  border-radius: 6px;
+  border: 1px solid #323238;
+  background-color: #202024;
+  color: #8d8d99;
+}
+
+/* Estrutura interna do card */
+.task-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  flex: 1;
+}
+
+.task-date {
+  font-size: 0.75rem;
+  color: #8d8d99;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* Destaque para tarefas atrasadas */
+.task-card.overdue {
+  border-left-color: #f75a68;
+}
+
+.task-card.overdue .task-date {
+  color: #f75a68;
+  font-weight: bold;
+}

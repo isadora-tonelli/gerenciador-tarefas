@@ -1,5 +1,6 @@
 const taskForm = document.getElementById('task-form');
 const taskInput = document.getElementById('task-input');
+const taskDateinput = document.getElementById('task-date-input')
 const taskLists = document.querySelectorAll('.task-list');
 
 let draggedCard = null;
@@ -11,14 +12,36 @@ document.addEventListener('DOMContentLoaded', loadTasks);
 taskForm.addEventListener('submit', (e) => {
   e.preventDefault();
   const text = taskInput.value.trim();
+  const dueDate = taskDateinput.value;
   if (!text) return;
 
   const id = Date.now().toString();
-  createTaskCard(id, text, 'todo');
+  createTaskCard(id, text, dueDate, 'todo');
   saveState();
 
   taskInput.value = '';
+  taskDateinput.value = '';
 });
+
+function isOverdue(dueDateStr, status){
+    if(!dueDateStr || stats === 'done') return false;
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const [year, month, day] = dueDateStr.split('-');
+    const dueDate = new Date(year, month - 1, day);
+
+    return dueDate < today;
+
+}
+
+function formatDate(dueDateStr){
+    if(!dueDateStr) return '';
+    const [year, month, day] = dueDateStr.split('-');
+    return '${day}/${month}/${year}';
+
+}
 
 // Criar o card da tarefa com eventos de Drag & Drop
 function createTaskCard(id, text, status) {
@@ -26,6 +49,14 @@ function createTaskCard(id, text, status) {
   card.className = 'task-card';
   card.draggable = true;
   card.dataset.id = id;
+  card.dataset.dueDate = dueDate || '';
+
+  if(isOverdue(dueDate, status)){
+    card.classList.add('overdue');
+  }
+
+  const contentDiv = document.createElement('div');
+  contentDiv.className = 'task-content';
 
   const span = document.createElement('span');
   span.textContent = text;
@@ -37,7 +68,16 @@ function createTaskCard(id, text, status) {
         span.textContent = newText.trim();
         saveState();
     }
-  })
+  });
+
+  contentDiv.appendChild(span);
+
+  if (dueDate) {
+    const dateSpan = document.createElement('small');
+    dateSpan.className = 'task-date';
+    dateSpan.textContent = `📅 ${formatDate(dueDate)}`;
+    contentDiv.appendChild(dateSpan);
+  }
 
   const deleteBtn = document.createElement('button');
   deleteBtn.className = 'delete-btn';
@@ -84,6 +124,16 @@ taskLists.forEach(list => {
     list.classList.remove('drag-over');
     if (draggedCard) {
       list.appendChild(draggedCard);
+
+      const status = list.parentElement.dataset.status;
+      const dueDate = draggedCard.dataset.dueDate;
+
+      if (isOverdue(dueDate, status)) {
+        draggedCard.classList.add('overdue');
+      } else {
+        draggedCard.classList.remove('overdue');
+      }
+
       saveState();
     }
   });
@@ -104,7 +154,8 @@ function saveState() {
     cards.forEach(card => {
       tasks.push({
         id: card.dataset.id,
-        text: card.querySelector('span').textContent,
+        text: card.querySelector('.task-content span').textContent,
+        dueDate: card.dataset.dueDate,
         status: status
       });
     });
@@ -115,6 +166,6 @@ function saveState() {
 
 function loadTasks() {
   const tasks = JSON.parse(localStorage.getItem('kanban-tasks')) || [];
-  tasks.forEach(task => createTaskCard(task.id, task.text, task.status));
+  tasks.forEach(task => createTaskCard(task.id, task.text, task.dueDate, task.status));
   saveState();
 }
